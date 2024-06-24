@@ -8,14 +8,19 @@ import (
 const (
 	screenWidth  = 800
 	screenHeight = 450
-	squareSize   = 50
+	squareSize   = 70
 	squareMargin = 3
+
+	TEAM_X = 1
+	TEAM_O = 0
+	NO_TEAM = -1
 )
 
 func main() {
 
 	rl.InitWindow(screenWidth, screenHeight, "Tic Tac Toe")
 	defer rl.CloseWindow()
+	xScore, oScore := 0, 0
 
 	rl.SetTargetFPS(60)
 	timeElasped := 0.0
@@ -36,6 +41,8 @@ func main() {
 		rl.ClearBackground(rl.RayWhite)
 
 		rl.DrawText("Tic Tac Toe!!", screenWidth/2, 30, 30, rl.Black)
+		rl.DrawText(fmt.Sprintf("O Score: %d", oScore), 30, 30, 20, rl.Blue)
+		rl.DrawText(fmt.Sprintf("X Score: %d", xScore), 30, 60, 20, rl.Red)
 
 		if timeElasped >= 2.0 {
 			rl.DrawText("Time to Play!", screenWidth/2, 60, 20, rl.Blue)
@@ -66,11 +73,11 @@ func main() {
 					if cursorPos.X >= float32(x) && cursorPos.X <= float32(x+squareSize) {
 						if cursorPos.Y >= float32(y) && cursorPos.Y <= float32(y+squareSize) {
 							isX = !isX
-							if board[i][j] == -1 {
+							if board[i][j] == NO_TEAM {
 								if isX {
-									board[i][j] = 1
+									board[i][j] = TEAM_X
 								} else {
-									board[i][j] = 0
+									board[i][j] = TEAM_O
 								}
 							}
 						}
@@ -93,4 +100,9 @@ func main() {
 
 		rl.EndDrawing()
 	}
+}
+
+func checkWinner(board [3][3]int) int {
+
+	for (i )
 }
