@@ -66,10 +66,12 @@ func main() {
 					if cursorPos.X >= float32(x) && cursorPos.X <= float32(x+squareSize) {
 						if cursorPos.Y >= float32(y) && cursorPos.Y <= float32(y+squareSize) {
 							isX = !isX
-							if isX {
-								board[i][j] = 1
-							} else {
-								board[i][j] = 0
+							if board[i][j] == -1 {
+								if isX {
+									board[i][j] = 1
+								} else {
+									board[i][j] = 0
+								}
 							}
 						}
 					}
