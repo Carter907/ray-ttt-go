@@ -12,7 +12,7 @@ type Board struct {
 	XScore int
 }
 
-func New() Board {
+func NewBoard() Board {
 
 	return Board{
 		Mat: [3][3]int{
@@ -24,26 +24,79 @@ func New() Board {
 		XScore: 0,
 	}
 }
-func CheckWinner(board *Board) (team int) {
+
+func CheckWinner(board *Board) (team int, arr [3]int) {
 	team = NO_TEAM
 
-	vsum, hsum := 0, 0
+	// check rows
+
 	for i := 0; i < len(board.Mat); i++ {
-		vsum, hsum = 0, 0
-		for j := 0; j < len(board.Mat[i]); j++ {
+		if team, arr = checkSquaresMatch(board.Mat[i]); team != NO_TEAM {
+			return
+		}
+	}
 
-			vsum += board.Mat[i][j]
-			hsum += board.Mat[j][i]
-		}
-		if vsum == 3 || hsum == 3 {
-			team = TEAM_X
-			break
-		}
-		if vsum == 0 || hsum == 0 {
-			team = TEAM_O
-			break
-		}
+	// check cols
 
+	for i := 0; i < len(board.Mat); i++ {
+		if team, arr = checkSquaresMatch(getCol(board.Mat, i)); team != NO_TEAM {
+
+			return
+		}
+	}
+
+	// check diagonals
+
+	if team, arr = checkSquaresMatch(getDiagonal(board.Mat, false)); team != NO_TEAM {
+
+		return
+	}
+	if team, arr = checkSquaresMatch(getDiagonal(board.Mat, true)); team != NO_TEAM {
+
+		return
+	}
+
+	return
+}
+
+func checkSquaresMatch(arr [3]int) (team int, _arr [3]int) {
+	team = NO_TEAM
+	sum := 0
+
+	for _, tm := range arr {
+
+		sum += tm
+
+	}
+	if sum == 3 {
+		team = TEAM_X
+	} else if sum == 0 {
+		team = TEAM_O
+	}
+
+	_arr = arr
+
+	return
+}
+
+func getCol(mat [3][3]int, index int) (col [3]int) {
+
+	for i := 0; i < len(mat); i++ {
+		col[i] = mat[i][index]
+	}
+
+	return
+}
+
+func getDiagonal(mat [3][3]int, rotate bool) (diag [3]int) {
+
+	for i := 0; i < len(mat); i++ {
+
+		if rotate {
+			diag[i] = mat[i][2-i]
+		} else {
+			diag[i] = mat[i][i]
+		}
 	}
 
 	return
