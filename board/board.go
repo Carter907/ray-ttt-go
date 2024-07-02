@@ -12,9 +12,9 @@ type Board struct {
 	XScore int
 }
 
-func NewBoard() Board {
+func New() *Board {
 
-	return Board{
+	return &Board{
 		Mat: [3][3]int{
 			{NO_TEAM, NO_TEAM, NO_TEAM},
 			{NO_TEAM, NO_TEAM, NO_TEAM},
@@ -27,11 +27,12 @@ func NewBoard() Board {
 
 func CheckWinner(board *Board) (team int, arr [3]int) {
 	team = NO_TEAM
+	arr = [3]int{-3, -3, -3}
 
 	// check rows
 
 	for i := 0; i < len(board.Mat); i++ {
-		if team, arr = checkSquaresMatch(board.Mat[i]); team != NO_TEAM {
+		if team, arr = CheckSquaresMatch(board.Mat[i]); team != NO_TEAM {
 			return
 		}
 	}
@@ -39,7 +40,7 @@ func CheckWinner(board *Board) (team int, arr [3]int) {
 	// check cols
 
 	for i := 0; i < len(board.Mat); i++ {
-		if team, arr = checkSquaresMatch(getCol(board.Mat, i)); team != NO_TEAM {
+		if team, arr = CheckSquaresMatch(getCol(board.Mat, i)); team != NO_TEAM {
 
 			return
 		}
@@ -47,11 +48,11 @@ func CheckWinner(board *Board) (team int, arr [3]int) {
 
 	// check diagonals
 
-	if team, arr = checkSquaresMatch(getDiagonal(board.Mat, false)); team != NO_TEAM {
+	if team, arr = CheckSquaresMatch(getDiagonal(board.Mat, false)); team != NO_TEAM {
 
 		return
 	}
-	if team, arr = checkSquaresMatch(getDiagonal(board.Mat, true)); team != NO_TEAM {
+	if team, arr = CheckSquaresMatch(getDiagonal(board.Mat, true)); team != NO_TEAM {
 
 		return
 	}
@@ -64,7 +65,7 @@ func IsDraw(board *Board) bool {
 	return false
 }
 
-func checkSquaresMatch(arr [3]int) (team int, _arr [3]int) {
+func CheckSquaresMatch(arr [3]int) (team int, _arr [3]int) {
 	team = NO_TEAM
 	sum := 0
 

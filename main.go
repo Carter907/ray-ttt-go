@@ -22,7 +22,7 @@ func main() {
 
 	rl.SetTargetFPS(60)
 	timeElasped := 0.0
-	board := boardUtils.NewBoard()
+	board := boardUtils.New()
 	isX := false
 	teamWon := boardUtils.NO_TEAM
 
@@ -85,11 +85,11 @@ func main() {
 
 		}
 
-		team, _ := boardUtils.CheckWinner(&board)
+		team, _ := boardUtils.CheckWinner(board)
 
 		teamWon = team
 
-		if teamWon != boardUtils.NO_TEAM || boardUtils.IsDraw(&board) {
+		if teamWon != boardUtils.NO_TEAM || boardUtils.IsDraw(board) {
 
 			for i := 0; i < len(board.Mat); i++ {
 				for j := 0; j < len(board.Mat[i]); j++ {

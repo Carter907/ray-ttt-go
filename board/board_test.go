@@ -1,28 +1,31 @@
 package board_test
 
 import (
-	boardUtils "github.com/Carter907/ray-ttt-go/board"
+	board "github.com/Carter907/ray-ttt-go/board"
 	"testing"
 )
 
+// Testing that the contents of the board are correctly updating
 func TestBoardContents(t *testing.T) {
 
-	b := boardUtils.NewBoard()
+	b := board.New()
 
 	for i := 0; i < len(b.Mat); i++ {
 		for j := 0; j < len(b.Mat[i]); j++ {
 
-			if b.Mat[i][j] != boardUtils.NO_TEAM {
-				t.Fatal("initial position of board is not correct")
+			if b.Mat[i][j] != board.NO_TEAM {
+				t.Fatalf("incorrect board contents: %v", b.Mat[i][j])
 			}
 		}
 	}
 
 }
-func TestBoardDraw(t *testing.T) {
-	b := boardUtils.NewBoard()
 
-	if boardUtils.IsDraw(&b) {
+// Testing that the board IsDraw function correctly identifies drawed positions
+func TestBoardDraw(t *testing.T) {
+	b := board.New()
+
+	if board.IsDraw(b) {
 		t.Fatalf("board can't draw it was just initialized.")
 	}
 
@@ -32,49 +35,61 @@ func TestBoardDraw(t *testing.T) {
 		{1, 0, 1},
 	}
 
-	if !boardUtils.IsDraw(&b) {
-		t.Errorf("board should draw but did not\n")
-		t.Logf("board state: %v", b.Mat)
+	if !board.IsDraw(b) {
+		t.Errorf("board should draw but did not\nboard state: %v", b.Mat)
+	}
+	b.Mat = [3][3]int{
+		{0, 0, 1},
+		{1, 0, 0},
+		{1, 0, 1},
+	}
+	if !board.IsDraw(b) {
+		t.Errorf("board should draw but did not\nboard state: %v", b.Mat)
 	}
 
 }
 
-func TestBoardSlices(t *testing.T) {
-
-	b := boardUtils.NewBoard()
-	b.Mat[0][0] = boardUtils.TEAM_X
-	b.Mat[1][0] = boardUtils.TEAM_X
-	b.Mat[2][0] = boardUtils.TEAM_X
-
-	t.Log(b.Mat)
-
-	t.Log(b.Mat[0:])
-
-}
-
+// Test that the board scores are initialized properly
 func TestBoardScores(t *testing.T) {
 
-	b := boardUtils.NewBoard()
+	b := board.New()
 
 	if b.OScore != 0 || b.XScore != 0 {
 		t.Fatal("scores of board are not initialized to 0")
 	}
 }
 
+// Test CheckWinner function that should correctly identifiy a winning position and return
+// the squares of the board associated.
 func TestCheckWinner(t *testing.T) {
-	b := boardUtils.NewBoard()
+	b := board.New()
 
-	t.Log(b.Mat)
+	winner, squares := board.CheckWinner(b)
 
-	winner, _ := boardUtils.CheckWinner(&b)
+	if winner != board.NO_TEAM {
 
-	if winner != boardUtils.NO_TEAM {
-		t.Fatalf("should've been no team but was %v", winner)
+		t.Fatalf("should've been team %v, but was %v", board.TEAM_O, winner)
 	}
-}
+	if team, _ := board.CheckSquaresMatch(squares); team != board.NO_TEAM {
 
-func TestTypes(t *testing.T) {
-	b := 3.2
+		t.Fatalf("should've been team %v, but was %v", board.TEAM_O, winner)
+	}
 
-	t.Logf("%T\n", b)
+	b.Mat = [3][3]int{
+
+		{0, 0, 0},
+		{1, -3, -3},
+		{-3, 1, -3},
+	}
+
+	winner, squares = board.CheckWinner(b)
+
+	if winner != board.TEAM_O {
+
+		t.Fatalf("should've been team %v, but was %v", board.TEAM_O, winner)
+	}
+	if team, _ := board.CheckSquaresMatch(squares); team != board.TEAM_O {
+
+		t.Fatalf("should've been team %v, but was %v", board.TEAM_O, winner)
+	}
 }
