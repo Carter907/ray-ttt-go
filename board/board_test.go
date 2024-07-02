@@ -1,30 +1,50 @@
-package board
+package board_test
 
 import (
-	"reflect"
+	boardUtils "github.com/Carter907/ray-ttt-go/board"
 	"testing"
 )
 
 func TestBoardContents(t *testing.T) {
 
-	b := NewBoard()
+	b := boardUtils.NewBoard()
 
 	for i := 0; i < len(b.Mat); i++ {
 		for j := 0; j < len(b.Mat[i]); j++ {
 
-			if b.Mat[i][j] != NO_TEAM {
+			if b.Mat[i][j] != boardUtils.NO_TEAM {
 				t.Fatal("initial position of board is not correct")
 			}
 		}
 	}
 
 }
+func TestBoardDraw(t *testing.T) {
+	b := boardUtils.NewBoard()
+
+	if boardUtils.IsDraw(&b) {
+		t.Fatalf("board can't draw it was just initialized.")
+	}
+
+	b.Mat = [3][3]int{
+		{0, 1, 0},
+		{0, 1, 0},
+		{1, 0, 1},
+	}
+
+	if !boardUtils.IsDraw(&b) {
+		t.Errorf("board should draw but did not\n")
+		t.Logf("board state: %v", b.Mat)
+	}
+
+}
+
 func TestBoardSlices(t *testing.T) {
 
-	b := NewBoard()
-	b.Mat[0][0] = TEAM_X
-	b.Mat[1][0] = TEAM_X
-	b.Mat[2][0] = TEAM_X
+	b := boardUtils.NewBoard()
+	b.Mat[0][0] = boardUtils.TEAM_X
+	b.Mat[1][0] = boardUtils.TEAM_X
+	b.Mat[2][0] = boardUtils.TEAM_X
 
 	t.Log(b.Mat)
 
@@ -34,7 +54,7 @@ func TestBoardSlices(t *testing.T) {
 
 func TestBoardScores(t *testing.T) {
 
-	b := NewBoard()
+	b := boardUtils.NewBoard()
 
 	if b.OScore != 0 || b.XScore != 0 {
 		t.Fatal("scores of board are not initialized to 0")
@@ -42,13 +62,13 @@ func TestBoardScores(t *testing.T) {
 }
 
 func TestCheckWinner(t *testing.T) {
-	b := NewBoard()
+	b := boardUtils.NewBoard()
 
 	t.Log(b.Mat)
 
-	winner, _ := CheckWinner(&b)
+	winner, _ := boardUtils.CheckWinner(&b)
 
-	if winner != NO_TEAM {
+	if winner != boardUtils.NO_TEAM {
 		t.Fatalf("should've been no team but was %v", winner)
 	}
 }
@@ -56,5 +76,5 @@ func TestCheckWinner(t *testing.T) {
 func TestTypes(t *testing.T) {
 	b := 3.2
 
-	t.Log(reflect.TypeOf(b))
+	t.Logf("%T\n", b)
 }

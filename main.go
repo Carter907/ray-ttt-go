@@ -89,7 +89,7 @@ func main() {
 
 		teamWon = team
 
-		if teamWon != boardUtils.NO_TEAM {
+		if teamWon != boardUtils.NO_TEAM || boardUtils.IsDraw(&board) {
 
 			for i := 0; i < len(board.Mat); i++ {
 				for j := 0; j < len(board.Mat[i]); j++ {

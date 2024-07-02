@@ -59,6 +59,11 @@ func CheckWinner(board *Board) (team int, arr [3]int) {
 	return
 }
 
+func IsDraw(board *Board) bool {
+
+	return false
+}
+
 func checkSquaresMatch(arr [3]int) (team int, _arr [3]int) {
 	team = NO_TEAM
 	sum := 0
